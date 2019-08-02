@@ -11,12 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PollsApplication {
 
 	@PostConstruct
-	public void init(){
+	public void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(PollsApplication.class, args);
 	}
-
 }

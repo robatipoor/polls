@@ -1,5 +1,6 @@
 package org.robatipoor.polls.model;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -19,7 +20,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createAt", "updateAt" }, allowGetters = true)
-public class DateAudit {
+public class DateAudit implements Serializable {
+    private static final long serialVersionUID = 1L;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createAt;
@@ -71,10 +73,7 @@ public class DateAudit {
 
     @Override
     public String toString() {
-        return "{" +
-            " createAt='" + getCreateAt() + "'" +
-            ", updateAt='" + getUpdateAt() + "'" +
-            "}";
+        return "{" + " createAt='" + getCreateAt() + "'" + ", updateAt='" + getUpdateAt() + "'" + "}";
     }
 
 }
