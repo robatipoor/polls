@@ -21,7 +21,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createAt", "updateAt" }, allowGetters = true)
 public class DateAudit implements Serializable {
-    private static final long serialVersionUID = 1L;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createAt;

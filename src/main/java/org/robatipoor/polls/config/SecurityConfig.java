@@ -24,23 +24,21 @@ import org.springframework.security.config.BeanIds;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    public CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    public JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    public CustomUserDetailsService customUserDetailsService;
-    @Autowired
-    public JwtAuthenticationEntryPoint unauthorizedHandler;
-
+    @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
@@ -69,12 +67,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // store user's state.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
-                        "/**/*.css", "/**/*.js")
+                        "/**/*.css", "/**/*.js","/index")
                 .permitAll() // Allow anyone (including unauthenticated users) to access to the URLs
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**").permitAll()
                 // all remaining URLs require that the user be successfully authenticated
+                .antMatchers("/user").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         // add our custom JWT security filter
